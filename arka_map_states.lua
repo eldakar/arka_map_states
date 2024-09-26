@@ -1,6 +1,7 @@
 arka_map_states = arka_map_states or {
   handler = nil,
   handler_gmcp = nil,
+  handler_ui = nil,
   data = "",
   data_enemies = "",
   cnt_t = 0,
@@ -380,7 +381,7 @@ function arka_map_states:popup_team_font_adjustment(size)
             font-size: 5pt;
         ]])
     end
-    testlabel:setColor(20,20,20, 230)
+    testlabel:setColor(20,20,20, 0)
 end
 
 function arka_map_states:popup_enemy_font_adjustment()
@@ -394,38 +395,28 @@ end
 
 
 function arka_map_states:popup()
-    popup = Geyser.Container:new({
-        name = "popup",
-        x="0", y="0",
-        width = "100%", height=100,
-    })
+
+    testlabell = Geyser.Label:new({
+        name = "testlabell",
+        x = "50%", y = "0",
+        width = "100%", height = "100%",
+    },scripts.ui.bottom)
 
     testlabel = Geyser.Label:new({
         name = "testlabel",
-        x = 0, y = 0,
+        x = "20%", y = "0",
         width = "30%", height = "100%",
-        fgColor = "white",
-        --message = [[<center>""</center>]]
-      }, popup)
-    testlabell = Geyser.Label:new({
-        name = "testlabell",
-        x = "30%", y = 0,
-        width = "100%", height = "100%",
-        fgColor = "white",
-        --message = [[<center>""</center>]]
-    }, popup)
+    },scripts.ui.bottom)
 
---    testlabel:setFontSize(30)  
-    
+    --name = "scripts.ui.bottom",
+--    testlabel:setColor(100,0,0,80)
+
     setLabelStyleSheet("testlabel", [[font-family: "Lucida Console", monospace;font-size: 10pt;]])
     setLabelStyleSheet("testlabell", [[font-family: "Lucida Console", monospace;font-size: 8pt;]])
 
-    testlabel:setColor(20,20,20, 230)
+    testlabel:setColor(20,20,20, 0)
     testlabell:setColor(40,20,20, 230)
 
-
-      --testlabel:echo(str)
--- setFontSize(name, scripts.ui.states_font_size)
 end
 
 --gmcp_parsing_finished
@@ -444,7 +435,7 @@ function arka_map_states:resize_fonts()
     
     if cnt_t ~= self.cnt_t then
         setLabelStyleSheet("testlabel",arka_map_states_font_team[100][cnt_t])
-        testlabel:setColor(20,20,20, 230)
+        testlabel:setColor(20,20,20, 0)
         self.cnt_t = cnt_t
     end
 
@@ -460,12 +451,14 @@ end
 
 
 function arka_map_states:init()
-    arka_map_states:popup()
+--arka_map_states:popup()
   --registerMapInfo("map_states", function() return self:map_info() end)
   --enableMapInfo("map_states")
   --self.handler = scripts.event_register:register_singleton_event_handler(self.handler, "printStatusDone", function() enableMapInfo("map_states") end)
   self.handler = scripts.event_register:register_singleton_event_handler(self.handler, "printStatusDone", function() self.label_states() end)
   self.handler_gmcp = scripts.event_register:register_singleton_event_handler(self.handler_gmcp, "gmcp_parsing_finished", function() arka_map_states:resize_fonts() end)
+  self.handler_ui = scripts.event_register:register_singleton_event_handler(self.handler_ui, "uiReady", function() arka_map_states:popup() end)
+  --uiReady
 end
 
 arka_map_states:init()
